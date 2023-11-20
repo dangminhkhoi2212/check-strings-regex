@@ -15,63 +15,6 @@ export const clear = (inputArray) => {
     }, {});
     return result;
 };
-// export const checkGrammar = (
-//     grammar,
-//     symbol,
-//     string,
-//     path = [],
-//     depth = 1,
-//     curRule = symbol[0],
-// ) => {
-//     console.log(
-//         '🚀 ~ file: regex.js:19 ~ checkGrammar ~ grammar, symbol, string:',
-//         { grammar, symbol, string },
-//     );
-//     if (depth > 1000) return false;
-//     if (!string && !symbol) {
-//         return true;
-//     }
-
-//     if (!string || !symbol) {
-//         return false;
-//     }
-
-//     if (symbol[0] === string[0]) {
-//         return checkGrammar(
-//             grammar,
-//             symbol.slice(1),
-//             string.slice(1),
-//             path,
-//             depth + 1,
-//             curRule,
-//         );
-//     }
-
-//     if (!grammar[symbol[0]]) {
-//         return false;
-//     }
-//     for (const rule of grammar[symbol[0]]) {
-//         let newPath = curRule;
-//         newPath = newPath.replace(symbol[0], rule);
-
-//         path.push(newPath + ' -> ' + curRule);
-//         if (
-//             checkGrammar(
-//                 grammar,
-//                 rule + symbol.slice(1),
-//                 string,
-//                 path,
-//                 depth + 1,
-//                 curRule,
-//             )
-//         ) {
-//             return true;
-//         }
-//         path.pop();
-//     }
-
-//     return false;
-// };
 
 export const filterLowercase = (grammar) => {
     // Create a copy of the original grammar
@@ -96,31 +39,31 @@ export const filterLowercase = (grammar) => {
 };
 export const checkGrammar = (
     grammar,
-    symbol,
+    start,
     string,
     path = [],
     depth = 1,
-    curRule = symbol[0],
+    curRule = start[0],
 ) => {
-    console.log({ symbol, string });
+    console.log({ start, string });
     // Check if depth exceeds 100, and if so, return false to prevent infinite recursion
     if (depth > 1000) return false;
 
-    // Check if both symbol and string are empty, which means a successful match
-    if (!symbol && !string) {
+    // Check if both start and string are empty, which means a successful match
+    if (!start && !string) {
         return true;
     }
 
-    // Check if either symbol or string is empty, which means the match failed
-    if (!symbol || !string) {
+    // Check if either start or string is empty, which means the match failed
+    if (!start || !string) {
         return false;
     }
 
-    // Check if the first character of symbol matches the first character of string
-    if (symbol[0] === string[0]) {
+    // Check if the first character of start matches the first character of string
+    if (start[0] === string[0]) {
         return checkGrammar(
             grammar,
-            symbol.slice(1),
+            start.slice(1),
             string.slice(1),
             path,
             depth + 1,
@@ -128,20 +71,20 @@ export const checkGrammar = (
         );
     }
 
-    // Check if the first character of symbol is a non-terminal in the grammar
-    if (grammar[symbol[0]]) {
-        for (const rule of grammar[symbol[0]]) {
+    // Check if the first character of start is a non-terminal in the grammar
+    if (grammar[start[0]]) {
+        for (const rule of grammar[start[0]]) {
             // Save the current rule and update it
             let newCurRule = curRule;
             if (newCurRule !== string) {
-                newCurRule = newCurRule.replace(symbol[0], rule);
+                newCurRule = newCurRule.replace(start[0], rule);
                 path.push(`${curRule} -> ${newCurRule}`);
             }
 
             if (
                 checkGrammar(
                     grammar,
-                    rule + symbol.slice(1),
+                    rule + start.slice(1),
                     string,
                     path,
                     depth + 1,
