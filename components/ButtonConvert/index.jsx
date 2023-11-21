@@ -32,14 +32,38 @@ const ButtonConvert = () => {
         const path = [];
         const result = await checkGrammar(grammar, start, string, path);
 
-        const V = Object.keys(grammar).map((k) => k);
+        const getUppercaseChars = (grammar) => {
+            let uppercaseChars = new Set();
+
+            for (let key in grammar) {
+                if (key === key.toUpperCase()) {
+                    uppercaseChars.add(key);
+                }
+
+                for (let values of grammar[key]) {
+                    for (let char of values) {
+                        if (
+                            char === char.toUpperCase() &&
+                            char !== char.toLowerCase()
+                        ) {
+                            uppercaseChars.add(char);
+                        }
+                    }
+                }
+            }
+
+            return Array.from(uppercaseChars);
+        };
+        const V = Array.from(getUppercaseChars(grammar));
+
+        console.log('🚀 ~ file: index.jsx:36 ~ handleConvert ~ V:', V);
         const P = [];
         for (const [key, value] of Object.entries(grammar)) {
             const str = `${key} -> ${value.join(' | ')}`;
             P.push(str);
         }
         const grammarShape = {
-            V,
+            V: Array.from(V),
             T: filterLowercase(grammar),
             P,
             S: start,
