@@ -71,7 +71,7 @@ export const checkGrammar = (
         );
     }
 
-    // Check if the first character of start is a non-terminal in the grammar
+    // Check if the first character of start is a non-terminal in the grammars
     if (grammar[start[0]]) {
         for (const rule of grammar[start[0]]) {
             // Save the current rule and update it
